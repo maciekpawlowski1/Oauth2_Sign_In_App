@@ -25,6 +25,8 @@ class SignInActivity : AppCompatActivity(), OauthSignInManager.SignInActionsList
         objectFactory = ObjectFactory(this)
         oauthUtils = objectFactory.oauthUtils
         oauthSignInManager = objectFactory.oauthSignInManager
+        oauthSignInManager.setSignInActionsListener(this)
+
         networkConnectionHelper = objectFactory.networkConnectionHelper
 
         if(networkConnectionHelper.isNetworkAvailable())

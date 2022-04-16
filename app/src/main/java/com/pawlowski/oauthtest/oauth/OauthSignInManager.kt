@@ -2,10 +2,7 @@ package com.pawlowski.oauthtest.oauth
 
 import android.util.Log
 import com.pawlowski.oauthtest.oauth.networking.FetchTokenUseCase
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class OauthSignInManager(private val fetchTokenUseCase: FetchTokenUseCase, private val sessionManager: SessionManager): OauthWebViewClient.CodeListener {
 
@@ -34,6 +31,7 @@ class OauthSignInManager(private val fetchTokenUseCase: FetchTokenUseCase, priva
             {
                 Log.d("OAuth", "Here is the access token! ${tokenResult.token}")
                 sessionManager.saveRefreshToken(tokenResult.token.refreshToken)
+                sessionManager.saveAccessToken(tokenResult.token.accessToken)
 
                 signInActionsListener?.onTokenSuccess()
             }
@@ -49,6 +47,10 @@ class OauthSignInManager(private val fetchTokenUseCase: FetchTokenUseCase, priva
         this.signInActionsListener = signInActionsListener
     }
 
+    fun cancelFetching()
+    {
+        fetchingTokenJob?.cancelChildren()
+    }
 
 
     interface SignInActionsListener
